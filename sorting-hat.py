@@ -129,9 +129,19 @@ def play_script(house):
     # Append the house
     script.append(get_full_path('houses', house + '.wav'))
 
+    # Play music
+    music_dir = ''
+    if len(script) <= 2:
+        music_dir = 'music_short'
+    else:
+        music_dir = 'music_long'
+    os.system('aplay ' + get_random_wav_file(music_dir) + ' &')
+    time.sleep(WAIT_TIME)
+    
+    # Play script
     for sound in script:
         os.system('aplay ' + sound)
-        time.sleep(WAIT_TIME)  
+        time.sleep(WAIT_TIME)
 
 def main():
     print "Sorting Hat v1.0"
