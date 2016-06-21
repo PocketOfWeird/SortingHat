@@ -3,6 +3,7 @@
 # sorting-hat.py
 # python 2.7.9
 # Author: Nathan Hartzler
+# Borrowed Lots of Code from: Matt Bachman and mheyman
 # License: MIT
 #
 # Sorting Hat python code to respond to keyboard input,
@@ -28,7 +29,9 @@ WAIT_TIME = .5
 
 def read_single_keypress():
     """Waits for a single keypress on stdin.
-
+    mheyman, July 6 2011
+    stackoverflow.com/question/983354/
+    
     This is a silly function to call if you need to do it a lot because it has
     to store stdin's current setup, setup stdin for reading single keystrokes
     then read the single keystroke then revert stdin back after reading the
@@ -75,6 +78,11 @@ def list_all_sound_files(subdir):
     """
     Get all the sound files from a subdir in the audio
     folder
+    
+    MIT License
+    Copyright (c) 2014 Matt Backmann
+    github.com/Bachmann1234/sortinghat
+    
     :param subdir:
         Subdir to list
     :return:
@@ -88,6 +96,11 @@ def get_full_path(subdir, audio_filename):
     """
     given an audio file and the subdir give a full path
     from the base sound dir
+
+    MIT License
+    Copyright (c) 2014 Matt Backmann
+    github.com/Bachmann1234/sortinghat
+    
     :param audio_filename:
         string, filename
     :return:
@@ -102,6 +115,11 @@ def get_full_path(subdir, audio_filename):
 def get_random_wav_file(subdir):
     """
     Used to play a sound matching a category
+
+    MIT License
+    Copyright (c) 2014 Matt Backmann
+    github.com/Bachmann1234/sortinghat
+    
     :param subdir:
         Which subdir to pull the file out of. Base dir is audio
     :return:
@@ -115,6 +133,15 @@ def get_random_wav_file(subdir):
     )
 
 def play_script(house):
+    """
+    Compiles and plays a random music and soundtrack leading to the selected house
+    
+    Started with Matt's code, then diverged a bit
+    MIT License
+    Copyright (c) 2014 Matt Backmann
+    github.com/Bachmann1234/sortinghat
+    """
+    
     # Consider some stalling lines
     script = list_all_sound_files('stalling')
     random.shuffle(script)
