@@ -158,11 +158,14 @@ def play_script(house):
 
     # Play music
     music_dir = ''
-    if len(script) <= 2:
+    if len(script) == 2:
         music_dir = 'music_short'
     else:
         music_dir = 'music_long'
-    os.system('aplay ' + get_random_wav_file(music_dir) + ' &')
+    if len(script) == 1:
+        pass
+    else:
+        os.system('aplay ' + get_random_wav_file(music_dir) + ' &')
     time.sleep(WAIT_TIME)
     
     # Play script
