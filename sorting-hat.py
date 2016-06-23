@@ -21,6 +21,7 @@ GRIFF_KEY = '5'
 HUFF_KEY = 'D'
 RAVEN_KEY = 'C'
 SLYTH_KEY = '6'
+WEASE_KEY = 'B'
 
 BASE_AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio")
 
@@ -193,6 +194,9 @@ def main():
         elif button == SLYTH_KEY:
             print "Slytherin!"
             selected_house = "slytherin"
+        elif button == WEASE_KEY:
+            print "Another Weasley!"
+            os.system('aplay ' + get_full_path('weasley', 'weasley.wav'))
         else:
             continue
         if selected_house != '':
