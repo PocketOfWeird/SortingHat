@@ -148,10 +148,10 @@ def play_script(house):
     random.shuffle(script)
     script = [get_full_path('stalling', f)
               for f in script
-              if random.random() < .1]
+              if random.random() < .3]
 
     # Consider shouting I know!
-    if random.random() < .5:
+    if random.random() < .7:
         script.append(get_random_wav_file('know'))
 
     # Append the house
