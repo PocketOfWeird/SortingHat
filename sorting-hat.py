@@ -21,7 +21,7 @@ GRIFF_KEY = '5'
 HUFF_KEY = 'D'
 RAVEN_KEY = 'C'
 SLYTH_KEY = '6'
-WEASE_KEY = 'B'
+WEASE_KEY = 'b'
 
 BASE_AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio")
 
