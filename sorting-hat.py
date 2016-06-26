@@ -190,10 +190,10 @@ def play_script(house):
 
 def main():
     print "Sorting Hat v1.5"
-    print "Press 'q' to quit"
+    print "Press 'z' to quit"
     print "Waiting for remote input..."
     key = ""
-    while key != "q":
+    while key != "z":
         key = read_single_keypress()
         if HOUSE_KEYS.has_key(key):
             play_script(HOUSE_KEYS[key])
