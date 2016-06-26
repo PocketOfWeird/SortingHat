@@ -17,11 +17,25 @@ import serial
 import sys
 import collections
 
-GRIFF_KEY = '5'
-HUFF_KEY = 'D'
-RAVEN_KEY = 'C'
-SLYTH_KEY = '6'
-WEASE_KEY = 'b'
+HOUSE_KEYS = {
+    '1':'gryffindor',
+    '2':'hufflepuff',
+    '3':'ravenclaw',
+    '4':'slytherin'
+}
+OTHER_KEYS = { 
+    '5':'weasley.wav',
+    '6':'yes.wav',
+    '7':'nodoubt.wav',
+    '8':'no.wav',
+    '9':'areyousure.wav',
+    '0':'ifyouresure.wav',
+    'q':'particularlydifficult.wav',
+    'w':'youwouldvedonewell.wav',
+    'e':'butistandbywhatisaid.wav',
+    'r':'beeinbonnet.wav',
+    't':'theme.wav'
+}
 
 BASE_AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio")
 
@@ -175,31 +189,17 @@ def play_script(house):
         time.sleep(WAIT_TIME)
 
 def main():
-    print "Sorting Hat v1.0"
+    print "Sorting Hat v1.5"
     print "Press 'q' to quit"
     print "Waiting for remote input..."
-    button = ""
-    while button != "q":
-        selected_house = ''
-        button = read_single_keypress()
-        if button == GRIFF_KEY:
-            print "Gryffindor!"
-            selected_house = "gryffindor"
-        elif button == HUFF_KEY:
-            print "Hufflepuff!"
-            selected_house = "hufflepuff"
-        elif button == RAVEN_KEY:
-            print "Ravenclaw!"
-            selected_house = "ravenclaw"
-        elif button == SLYTH_KEY:
-            print "Slytherin!"
-            selected_house = "slytherin"
-        elif button == WEASE_KEY:
-            print "Another Weasley!"
-            os.system('aplay ' + get_full_path('weasley', 'weasley.wav'))
+    key = ""
+    while key != "q":
+        key = read_single_keypress()
+        if HOUSE_KEYS.has_key(key):
+            play_script(HOUSE_KEYS[key])
+        elif OTHER_KEYS.has_key(key):
+            os.system('aplay ' + get_full_path('single', OTHER_KEYS[key]))
         else:
             continue
-        if selected_house != '':
-            play_script(selected_house)
             
 main()
