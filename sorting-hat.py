@@ -37,7 +37,8 @@ OTHER_KEYS = {
     't':'theme.wav'
 }
 
-BASE_AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_AUDIO_DIR = os.path.join(BASE_DIR, "audio")
 
 WAIT_TIME = .5
 
@@ -162,7 +163,7 @@ def play_script(house):
     random.shuffle(script)
     script = [get_full_path('stalling', f)
               for f in script
-              if random.random() < .3]
+              if random.random() < .1]
 
     # Consider shouting I know!
     if random.random() < .7:
@@ -185,6 +186,7 @@ def play_script(house):
     
     # Play script
     for sound in script:
+        os.system('python ' + BASE_DIR + '/puppet.py ' + sound + '.txt &') 
         os.system('aplay ' + sound)
         time.sleep(WAIT_TIME)
 
@@ -201,5 +203,6 @@ def main():
             os.system('aplay ' + get_full_path('single', OTHER_KEYS[key]))
         else:
             continue
+        time.sleep(1)
             
 main()
