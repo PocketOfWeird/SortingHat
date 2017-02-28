@@ -72,9 +72,9 @@ def puppeteer(file):
         direction = performance[i][0]
         number = performance[i][1:]
         if direction == 'o':
-            open_mouth(int(number))
+            open_mouth(float(number))
         elif direction == 'p':
-            time.sleep(int(number))
+            time.sleep(float(number))
 
 
 ##########################################################
