@@ -68,7 +68,7 @@ def puppeteer(file):
     f = open(file)
     line = f.read()
     performance = line.split(',')
-    for i in range(0, len(performance))
+    for i in range(0, len(performance)):
         (direction,number) = performance[i]
         if direction == 'o':
             open_mouth(number)
