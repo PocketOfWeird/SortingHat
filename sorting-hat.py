@@ -17,6 +17,9 @@ import serial
 import sys
 import collections
 
+# Import the PCA9685 module.
+import Adafruit_PCA9685
+
 HOUSE_KEYS = {
     '1':'gryffindor',
     '2':'hufflepuff',
@@ -41,6 +44,27 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_AUDIO_DIR = os.path.join(BASE_DIR, "audio")
 
 WAIT_TIME = .5
+
+##########################################################
+#     Puppet Bits
+##########################################################
+# Initialise the PCA9685 using the default address (0x40).
+pwm = Adafruit_PCA9685.PCA9685()
+
+# Set frequency to 60hz, good for servos.
+pwm.set_pwm_freq(60)
+
+# Configure min and max servo pulse lengths
+servo_min = 250  # Min pulse length out of 4096
+servo_max = 360  # Max pulse length out of 4096
+
+def open_mouth(num_times):
+    for i in range(0, num_times):
+        pwm.set_pwm(0, 0, servo_min)
+        time.sleep(.15)
+        pwm.set_pwm(0, 0, servo_max)
+        time.sleep(.15)
+        pwm.set_pwm(0, 0, servo_min)
 
 
 def read_single_keypress():
@@ -157,16 +181,18 @@ def play_script(house):
     Copyright (c) 2014 Matt Backmann
     github.com/Bachmann1234/sortinghat
     """
-    
+
+    script = []
+    """
     # Consider some stalling lines
     script = list_all_sound_files('stalling')
     random.shuffle(script)
     script = [get_full_path('stalling', f)
               for f in script
               if random.random() < .1]
-
+    """
     # Consider shouting I know!
-    if random.random() < .7:
+    if random.random() < .8:
         script.append(get_random_wav_file('know'))
 
     # Append the house
@@ -186,9 +212,11 @@ def play_script(house):
     
     # Play script
     for sound in script:
-        os.system('python ' + BASE_DIR + '/puppet.py ' + sound + '.txt &') 
-        os.system('aplay ' + sound)
-        time.sleep(WAIT_TIME)
+        #os.system('python ' + BASE_DIR + '/puppet.py ' + sound + '.txt &')
+        os.system('aplay ' + sound + ' &')
+        time.sleep(.25)
+        open_mouth(2)
+        time.sleep(4)
 
 def main():
     print "Sorting Hat v1.5"
@@ -200,7 +228,8 @@ def main():
         if HOUSE_KEYS.has_key(key):
             play_script(HOUSE_KEYS[key])
         elif OTHER_KEYS.has_key(key):
-            os.system('aplay ' + get_full_path('single', OTHER_KEYS[key]))
+            os.system('aplay ' + get_full_path('single', OTHER_KEYS[key]) + ' &')
+            open_mouth(2)
         else:
             continue
         time.sleep(1)
