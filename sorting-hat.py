@@ -50,19 +50,24 @@ WAIT_TIME = .5
 pwm = Adafruit_PCA9685.PCA9685()
 
 # Set frequency to 60hz, good for servos.
-pwm.set_pwm_freq(60)
+pwm.set_pwm_freq(125)
 
-# Configure min and max servo pulse lengths
-servo_min = 250  # Min pulse length out of 4096
-servo_max = 360  # Max pulse length out of 4096
+
+servo_start = 0
+close_pos = 230
+open_pos = 630
 
 def open_mouth(num_times):
     for i in range(0, num_times):
-        pwm.set_pwm(0, 0, servo_min)
-        time.sleep(.15)
-        pwm.set_pwm(0, 0, servo_max)
-        time.sleep(.15)
-        pwm.set_pwm(0, 0, servo_min)
+	pwm.set_pwm(0, servo_start, close_pos)
+	time.sleep(.1)
+        pwm.set_pwm(0, servo_start, open_pos)
+        time.sleep(.1)
+        pwm.set_pwm(0, servo_start, close_pos)
+        
+def done_talking():
+    time.sleep(.125)
+    pwm.set_pwm(0,0,0)
 
 def puppeteer(file):
     f = open(file)
@@ -75,7 +80,6 @@ def puppeteer(file):
             open_mouth(int(number))
         elif direction == 'p':
             time.sleep(float(number))
-
 
 ##########################################################
 #     Input Bits
@@ -126,6 +130,10 @@ def read_single_keypress():
         termios.tcsetattr(fd, termios.TCSAFLUSH, attrs_save)
         fcntl.fcntl(fd, fcntl.F_SETFL, flags_save)
     return ret
+
+##########################################################
+#     File Bits
+##########################################################
 
 def list_all_sound_files(subdir):
     """
@@ -184,6 +192,14 @@ def get_random_wav_file(subdir):
             list_all_sound_files(subdir)
         )
     )
+##########################################################
+#     Play Bits
+##########################################################
+def play_sound(sound):
+    os.system('aplay ' + sound + ' &')
+    time.sleep(.25)
+    puppeteer(sound + '.txt')
+    done_talking()
 
 def play_script(house):
     """
@@ -210,28 +226,28 @@ def play_script(house):
 
     # Append the house
     script.append(get_full_path('houses', house + '.wav'))
-
+    
+    script_len = len(script)
+   
     # Play music
     music_dir = ''
-    if len(script) == 2:
+    if script_len <= 2:
         music_dir = 'music_short'
     else:
         music_dir = 'music_long'
-    if len(script) == 1:
+    if script_len == 1:
         pass
     else:
         os.system('aplay ' + get_random_wav_file(music_dir) + ' &')
     time.sleep(WAIT_TIME)
 
-    # Play script
+    # Finally play the script
     for sound in script:
-        os.system('aplay ' + sound + ' &')
-        time.sleep(.25)
-        puppeteer(sound + '.txt')
+        play_sound(sound)
         time.sleep(4)
 
 def main():
-    print "Sorting Hat v1.5"
+    print "Sorting Hat v1.8"
     print "Press 'z' to quit"
     print "Waiting for remote input..."
     key = ""
@@ -240,10 +256,7 @@ def main():
         if HOUSE_KEYS.has_key(key):
             play_script(HOUSE_KEYS[key])
         elif OTHER_KEYS.has_key(key):
-            os.system('aplay ' + get_full_path('single', OTHER_KEYS[key]) + ' &')
-            open_mouth(2)
-        else:
-            continue
-        time.sleep(1)
+            single_sound = get_full_path('single', OTHER_KEYS[key])
+            play_sound(single_sound)
 
 main()
