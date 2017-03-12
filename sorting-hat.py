@@ -14,8 +14,6 @@ import os
 import random
 import time
 import sys
-
-# Import the PCA9685 module.
 import Adafruit_PCA9685
 
 HOUSE_KEYS = {
@@ -80,56 +78,6 @@ def puppeteer(file):
             open_mouth(int(number))
         elif direction == 'p':
             time.sleep(float(number))
-
-##########################################################
-#     Input Bits
-##########################################################
-def read_single_keypress():
-    """Waits for a single keypress on stdin.
-    mheyman, July 6 2011
-    stackoverflow.com/question/983354/
-
-    This is a silly function to call if you need to do it a lot because it has
-    to store stdin's current setup, setup stdin for reading single keystrokes
-    then read the single keystroke then revert stdin back after reading the
-    keystroke.
-
-    Returns the character of the key that was pressed (zero on
-    KeyboardInterrupt which can happen when a signal gets handled)
-
-    """
-    import termios, fcntl, sys, os
-    fd = sys.stdin.fileno()
-    # save old state
-    flags_save = fcntl.fcntl(fd, fcntl.F_GETFL)
-    attrs_save = termios.tcgetattr(fd)
-    # make raw - the way to do this comes from the termios(3) man page.
-    attrs = list(attrs_save) # copy the stored version to update
-    # iflag
-    attrs[0] &= ~(termios.IGNBRK | termios.BRKINT | termios.PARMRK
-                  | termios.ISTRIP | termios.INLCR | termios. IGNCR
-                  | termios.ICRNL | termios.IXON )
-    # oflag
-    attrs[1] &= ~termios.OPOST
-    # cflag
-    attrs[2] &= ~(termios.CSIZE | termios. PARENB)
-    attrs[2] |= termios.CS8
-    # lflag
-    attrs[3] &= ~(termios.ECHONL | termios.ECHO | termios.ICANON
-                  | termios.ISIG | termios.IEXTEN)
-    termios.tcsetattr(fd, termios.TCSANOW, attrs)
-    # turn off non-blocking
-    fcntl.fcntl(fd, fcntl.F_SETFL, flags_save & ~os.O_NONBLOCK)
-    # read a single keystroke
-    try:
-        ret = sys.stdin.read(1) # returns a single character
-    except KeyboardInterrupt:
-        ret = 0
-    finally:
-        # restore old state
-        termios.tcsetattr(fd, termios.TCSAFLUSH, attrs_save)
-        fcntl.fcntl(fd, fcntl.F_SETFL, flags_save)
-    return ret
 
 ##########################################################
 #     File Bits
@@ -249,10 +197,10 @@ def play_script(house):
 def main():
     print "Sorting Hat v1.8"
     print "Press 'z' to quit"
-    print "Waiting for remote input..."
     key = ""
     while key != "z":
-        key = read_single_keypress()
+        key = str(raw_input("Waiting for remote input... "))
+        print key
         if HOUSE_KEYS.has_key(key):
             play_script(HOUSE_KEYS[key])
         elif OTHER_KEYS.has_key(key):
