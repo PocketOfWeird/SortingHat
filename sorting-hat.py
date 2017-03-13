@@ -41,19 +41,20 @@ BASE_AUDIO_DIR = os.path.join(BASE_DIR, "audio")
 
 WAIT_TIME = .5
 
+USE_MOUTH = True
+
 ##########################################################
 #     Puppet Bits
 ##########################################################
 # Initialise the PCA9685 using the default address (0x40).
 pwm = Adafruit_PCA9685.PCA9685()
 
-# Set frequency to 60hz, good for servos.
-pwm.set_pwm_freq(60)
+pwm.set_pwm_freq(80)
 
 
 servo_start = 0
-close_pos = 230
-open_pos = 630
+close_pos = 300
+open_pos = 800
 
 def open_mouth(num_times, sleep_time):
     for i in range(0, num_times):
@@ -149,9 +150,10 @@ def get_random_wav_file(subdir):
 ##########################################################
 def play_sound(sound):
     os.system('aplay ' + sound + ' &')
-    time.sleep(.25)
-    puppeteer(sound + '.txt')
-    done_talking()
+    if USE_MOUTH:
+        time.sleep(.25)
+        puppeteer(sound + '.txt')
+        done_talking()
 
 def play_script(house):
     """
