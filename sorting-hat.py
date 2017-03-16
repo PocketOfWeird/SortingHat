@@ -48,19 +48,19 @@ WAIT_TIME = .5
 pwm = Adafruit_PCA9685.PCA9685()
 
 # Set frequency to 60hz, good for servos.
-pwm.set_pwm_freq(125)
+pwm.set_pwm_freq(60)
 
 
 servo_start = 0
 close_pos = 230
 open_pos = 630
 
-def open_mouth(num_times):
+def open_mouth(num_times, sleep_time):
     for i in range(0, num_times):
 	pwm.set_pwm(0, servo_start, close_pos)
-	time.sleep(.1)
+	time.sleep(sleep_time)
         pwm.set_pwm(0, servo_start, open_pos)
-        time.sleep(.1)
+        time.sleep(sleep_time)
         pwm.set_pwm(0, servo_start, close_pos)
         
 def done_talking():
@@ -71,11 +71,15 @@ def puppeteer(file):
     f = open(file)
     line = f.read()
     performance = line.split(',')
+    sleep=0.1
     for i in range(0, len(performance)):
         direction = performance[i][0]
         number = performance[i][1:]
+	if direction == 's':
+            sleep=float(number)
+            continue 
         if direction == 'o':
-            open_mouth(int(number))
+            open_mouth(int(number),sleep)
         elif direction == 'p':
             time.sleep(float(number))
 
