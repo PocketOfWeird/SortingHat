@@ -1,7 +1,6 @@
 #!/usr/bin/python
-
 # sorting-hat.py
-# python 2.7.9
+#w python 2.7.9
 # Author: Nathan Hartzler
 # Borrowed Lots of Code from: Matt Bachman and mheyman
 # License: MIT
@@ -207,6 +206,9 @@ def main():
     while key != "z":
         key = str(raw_input("Waiting for remote input... "))
         print key
+        if key:
+            key = key[0]
+            print key
         if HOUSE_KEYS.has_key(key):
             play_script(HOUSE_KEYS[key])
         elif OTHER_KEYS.has_key(key):
